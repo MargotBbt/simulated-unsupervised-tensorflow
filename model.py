@@ -13,6 +13,8 @@ class Model(object):
     self.config = config
 
     self.input_height = config.input_height
+
+
     self.input_width = config.input_width
     self.input_channel = config.input_channel
 
@@ -303,6 +305,8 @@ class Model(object):
     with tf.variable_scope("discriminator", reuse=reuse) as sc:
       layer = conv2d(layer, 96, 3, 2, scope="conv_1", name=name)
       layer = conv2d(layer, 64, 3, 2, scope="conv_2", name=name)
+      # layer = conv2d(layer, 96, 7, 4, scope="conv_1", name=name)
+      # layer = conv2d(layer, 64, 5, 2, scope="conv_2", name=name)
       layer = max_pool2d(layer, 3, 1, scope="max_1", name=name)
       layer = conv2d(layer, 32, 3, 1, scope="conv_3", name=name)
       layer = conv2d(layer, 32, 1, 1, scope="conv_4", name=name)
