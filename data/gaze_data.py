@@ -25,6 +25,8 @@ def maybe_download_and_extract(
     config,
     data_path,
     url='http://datasets.d2.mpi-inf.mpg.de/MPIIGaze/MPIIGaze.tar.gz'):
+  print(data_path)
+  print(config.real_image_dir)
   if not os.path.exists(os.path.join(data_path, config.real_image_dir)):
     if not os.path.exists(data_path):
       os.makedirs(data_path)
