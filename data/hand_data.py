@@ -150,8 +150,15 @@ def load(config, data_path, sample_path, rng):
       for directory_2 in next(os.walk(real_image_path + '/' + directory_0 + '/' + directory_1))[1] :
         for myFile in glob (real_image_path + '/' + directory_0 + '/' + directory_1 + '/' + directory_2 + '/*.jpg') :
           img = cv2.imread(myFile)
-          img = cv2.resize(img, (228, 128)) 
-          grey_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+          f = max(128./img.shape[0], 228./img.shape[1])
+
+          # resize and crop image to be have an image size equal between synthetic and real data
+          img = cv2.resize(img, (int(np.ceil(img.shape[1]*f)), int(np.ceil(img.shape[0]*f))))
+          img_crop = np.zeros((128, 228,3), np.uint8)
+          x_diff, x_rem = (img.shape[0] - img_crop.shape[0])/2, (img.shape[0] - img_crop.shape[0])%2
+          y_diff, y_rem = (img.shape[1] - img_crop.shape[1])/2, (img.shape[1] - img_crop.shape[1])%2
+          img_crop[:,:] = img[x_diff+x_rem:img.shape[0]-x_diff, y_diff+y_rem:img.shape[1]-y_diff]
+          grey_img = cv2.cvtColor(img_crop, cv2.COLOR_BGR2GRAY)
           real_data.append(grey_img)
 
 
