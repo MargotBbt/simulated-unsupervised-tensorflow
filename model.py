@@ -293,8 +293,10 @@ class Model(object):
 
   def _build_refiner(self, layer):
     with tf.variable_scope("refiner") as sc:
-      layer = conv2d(layer, 64, 3, 1, scope="conv_1")
-      layer = repeat(layer, 4, resnet_block, scope="resnet")
+      # layer = conv2d(layer, 64, 3, 1, scope="conv_1")
+      # layer = repeat(layer, 4, resnet_block, scope="resnet")
+      layer = conv2d(layer, 64, 7, 1, scope="conv_1")
+      layer = repeat(layer, 10, resnet_block, scope="resnet")
       layer = conv2d(layer, 1, 1, 1, 
                      activation_fn=None, scope="conv_2")
       output = tanh(layer, name="tanh")
@@ -303,10 +305,10 @@ class Model(object):
 
   def _build_discrim(self, layer, name, reuse=False):
     with tf.variable_scope("discriminator", reuse=reuse) as sc:
-      layer = conv2d(layer, 96, 3, 2, scope="conv_1", name=name)
-      layer = conv2d(layer, 64, 3, 2, scope="conv_2", name=name)
-      # layer = conv2d(layer, 96, 7, 4, scope="conv_1", name=name)
-      # layer = conv2d(layer, 64, 5, 2, scope="conv_2", name=name)
+      # layer = conv2d(layer, 96, 3, 2, scope="conv_1", name=name)
+      # layer = conv2d(layer, 64, 3, 2, scope="conv_2", name=name)
+      layer = conv2d(layer, 96, 7, 4, scope="conv_1", name=name)
+      layer = conv2d(layer, 64, 5, 2, scope="conv_2", name=name)
       layer = max_pool2d(layer, 3, 1, scope="max_1", name=name)
       layer = conv2d(layer, 32, 3, 1, scope="conv_3", name=name)
       layer = conv2d(layer, 32, 1, 1, scope="conv_4", name=name)
