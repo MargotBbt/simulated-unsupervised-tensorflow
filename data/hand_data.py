@@ -140,7 +140,7 @@ def load(config, data_path, sample_path, rng):
   synthetic_image_path = maybe_preprocess(config, data_path, sample_path)
 
   # gaze_data = np.load(os.path.join(data_path, DATA_FNAME))
-  real_image_path = os.path.join(data_path, 'real_images_egohands')
+  real_image_path = os.path.join(data_path, config.real_image_dir)
   real_data = []
   files = glob (real_image_path + "/*.jpg")
 
