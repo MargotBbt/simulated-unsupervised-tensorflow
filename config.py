@@ -26,7 +26,7 @@ data_arg.add_argument('--input_height', type=int, default=128)
 data_arg.add_argument('--input_width', type=int, default=228)
 data_arg.add_argument('--input_channel', type=int, default=1)
 data_arg.add_argument('--max_synthetic_num', type=int, default=-1)
-data_arg.add_argument('--real_image_dir', type=str, default="Real_Images")
+data_arg.add_argument('--real_image_dir', type=str, default="real_images_egohands")
 data_arg.add_argument('--synthetic_image_dir', type=str, default="Synthetic_Images")
 
 # Training / test parameters
