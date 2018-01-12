@@ -115,27 +115,33 @@ class Trainer(object):
       res = self.model.train_discrim(
           self.sess, feed_dict, self._summary_writer, with_history=True, with_output=False)
       self._summary_writer = self._get_summary_writer(res)
+      return res['loss']
 
     for epoch in range(self.config.num_epochs):
         print("Epoch {}/{}".format(epoch, self.config.num_epochs))
-        loss = None
-        t = trange(self.initial_K_g, desc="Train refiner.  Refiner loss {}".format(loss))
+        ref_loss = None
+        t = trange(self.initial_K_g, desc="Train refiner.")
         for k in t:
-          loss = train_refiner(push_buffer=k > self.initial_K_g * 0.9)
-          t.set_description("Train refiner.  Refiner loss {}".format(loss))
+          ref_loss = train_refiner(push_buffer=k > self.initial_K_g * 0.9)
+          t.set_description("Train refiner.  Refiner loss {}".format(ref_loss))
 
-        for k in trange(self.initial_K_d, desc="Train discrim"):
-          train_discrim()
+        discr_loss = None
+        t = trange(self.initial_K_d, desc="Train discrim")
+        for k in t:
+          discr_loss = train_discrim()
+          t.set_description("Train discrim {}".format(discr_loss))
 
-        t = trange(self.max_step, desc="Train both. Refiner loss {}".format(loss))
+        t = trange(self.max_step, desc="Train both.")
         for step in t:
           for k in xrange(self.K_g):
-            loss = train_refiner(push_buffer=True)
-            t.set_description("Train both. Refiner loss {}".format(loss))
+            ref_loss = train_refiner(push_buffer=True)
+            t.set_description("Train both. Refiner loss {}, Discrim loss: {}".format(ref_loss, discr_loss))
             t.refresh()
 
           for k in xrange(self.K_d):
-            train_discrim()
+            discr_loss = train_discrim()
+            t.set_description("Train both. Refiner loss {}, Discrim loss: {}".format(ref_loss, discr_loss))
+            t.refresh()
 
   def test(self):
     batch_size = self.data_loader.batch_size
