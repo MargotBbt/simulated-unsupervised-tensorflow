@@ -151,7 +151,7 @@ class Trainer(object):
       for image, filename in zip(res['output'], res['filename']):
         basename = os.path.basename(filename).replace("_cropped", "_refined")
         path = os.path.join(self.config.output_model_dir, basename)
-        imwrite(path, image[:,:,0])
+        imwrite(path, image)
 
   def _inject_summary(self, tag, feed_dict, step):
     summaries = self.sess.run(self.summary_ops[tag], feed_dict)
@@ -160,7 +160,7 @@ class Trainer(object):
     path = os.path.join(
         self.config.sample_model_dir, "{}.png".format(step))
     imwrite(path, img_tile(summaries['output'],
-            tile_shape=self.config.sample_image_grid)[:,:,0])
+            tile_shape=self.config.sample_image_grid))
 
   def _get_summary_writer(self, result):
     if result['step'] % self.log_step == 0:

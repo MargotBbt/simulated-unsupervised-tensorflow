@@ -144,8 +144,6 @@ def load(config, data_path, sample_path, rng):
   real_data = []
   files = glob (real_image_path + "/*.jpg")
 
-  real_data = []
-
   # for directory_0 in next(os.walk(real_image_path))[1] :
   #   for directory_1 in next(os.walk(real_image_path + '/' + directory_0))[1]:
   #     for directory_2 in next(os.walk(real_image_path + '/' + directory_0 + '/' + directory_1))[1] :
@@ -171,8 +169,11 @@ def load(config, data_path, sample_path, rng):
     x_diff, x_rem = (img.shape[0] - img_crop.shape[0])/2, (img.shape[0] - img_crop.shape[0])%2
     y_diff, y_rem = (img.shape[1] - img_crop.shape[1])/2, (img.shape[1] - img_crop.shape[1])%2
     img_crop[:,:] = img[x_diff+x_rem:img.shape[0]-x_diff, y_diff+y_rem:img.shape[1]-y_diff]
-    grey_img = cv2.cvtColor(img_crop, cv2.COLOR_BGR2GRAY)
-    real_data.append(grey_img)
+    # grey_img = cv2.cvtColor(img_crop, cv2.COLOR_BGR2GRAY)
+    # real_data.append(grey_img)
+    real_data.append(img_crop)
+
+  real_data = np.asarray(real_data)
 
   # real_data = gaze_data['real']
 
@@ -199,7 +200,7 @@ class DataLoader(object):
     self.real_data, synthetic_image_path = load(config, self.data_path, self.sample_path, rng)
 
     self.synthetic_data_paths = np.array(glob(os.path.join(synthetic_image_path, '*_cropped.png')))
-    self.synthetic_data_dims = list(imread(self.synthetic_data_paths[0]).shape) + [1]
+    self.synthetic_data_dims = list(imread(self.synthetic_data_paths[0]).shape) #+ [1]
 
     self.synthetic_data_paths.sort()
 
