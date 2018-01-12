@@ -78,10 +78,10 @@ class Trainer(object):
 
     sample_num = reduce(lambda x, y: x*y, self.config.sample_image_grid)
     idxs = self.rng.choice(len(self.data_loader.synthetic_data_paths), sample_num)
-    test_samples = np.expand_dims(np.stack(
+    test_samples = np.stack(
         [imread(path) for path in \
             self.data_loader.synthetic_data_paths[idxs]]
-    ), -1)
+    )
 
     def train_refiner(push_buffer=False):
       feed_dict = {
@@ -101,9 +101,6 @@ class Trainer(object):
         self._inject_summary(
           'test_refined_images', feed_dict, res['step'])
 
-        if res['step'] / float(self.log_step) == 1.:
-          self._inject_summary(
-              'test_synthetic_images', feed_dict, res['step'])
       return res['loss']
 
     def train_discrim():
