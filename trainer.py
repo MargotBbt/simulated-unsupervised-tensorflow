@@ -117,7 +117,7 @@ class Trainer(object):
     ref_loss = None
     t = trange(self.initial_K_g, desc="Train refiner.")
     for k in t:
-      ref_loss = train_refiner(push_buffer=k > self.initial_K_g * 0.9)
+      ref_loss = train_refiner(push_buffer=(k > self.initial_K_g * 0.9 or k == self.initial_K_g - 1))
       t.set_description("Train refiner.  Refiner loss {}".format(ref_loss))
 
     discr_loss = None
