@@ -90,7 +90,6 @@ class Trainer(object):
       res = self.model.train_refiner(
           self.sess, feed_dict, self._summary_writer, with_output=True)
       self._summary_writer = self._get_summary_writer(res)
-      return res['loss']
 
       if push_buffer:
         self.history_buffer.push(res['output'])
@@ -105,6 +104,7 @@ class Trainer(object):
         if res['step'] / float(self.log_step) == 1.:
           self._inject_summary(
               'test_synthetic_images', feed_dict, res['step'])
+      return res['loss']
 
     def train_discrim():
       feed_dict = {
