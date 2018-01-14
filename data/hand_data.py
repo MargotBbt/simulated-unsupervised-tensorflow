@@ -3,7 +3,6 @@ import sys
 import json
 import fnmatch
 import tarfile
-import cv2
 from PIL import Image
 from glob import glob
 from tqdm import tqdm
@@ -11,7 +10,7 @@ from six.moves import urllib
 
 import numpy as np
 
-from utils import loadmat, imread, imwrite
+from utils import loadmat, imread, imwrite, imresize
 
 DATA_FNAME = 'gaze.npz'
 
@@ -162,10 +161,10 @@ def load(config, data_path, sample_path, rng):
 
 
   for myFile in files:
-    img = cv2.imread(myFile)
-    f = max(128./img.shape[0], 228./img.shape[1])
-    img = cv2.resize(img, (int(np.ceil(img.shape[1]*f)), int(np.ceil(img.shape[0]*f))))
-    img_crop = np.zeros((128, 228,3), np.uint8)
+    img = imread(myFile)
+    f = max(228./img.shape[0], 128./img.shape[1])
+    img = imresize(img, (int(np.ceil(img.shape[0]*f)), int(np.ceil(img.shape[1]*f))))
+    img_crop = np.zeros((128, 228, 3), np.uint8)
     x_diff, x_rem = (img.shape[0] - img_crop.shape[0])/2, (img.shape[0] - img_crop.shape[0])%2
     y_diff, y_rem = (img.shape[1] - img_crop.shape[1])/2, (img.shape[1] - img_crop.shape[1])%2
     img_crop[:,:] = img[x_diff+x_rem:img.shape[0]-x_diff, y_diff+y_rem:img.shape[1]-y_diff]

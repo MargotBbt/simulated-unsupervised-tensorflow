@@ -101,6 +101,10 @@ class Trainer(object):
         self._inject_summary(
           'test_refined_images', feed_dict, res['step'])
 
+        if res['step'] / float(self.log_step) == 1.:
+          self._inject_summary(
+          'test_synthetic_images', feed_dict, res['step'])
+
       return res['loss']
 
     def train_discrim():
